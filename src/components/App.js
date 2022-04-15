@@ -15,9 +15,8 @@ import Navbar from './Navbar';
 import Page404 from './Page404';
 import Login from './Login';
 import Signup from './Signup';
+import Settings from './Settings';
 import { authenticateUser } from '../actions/auth';
-
-const Settings = () => <div>Settings</div>;
 
 const PrivateRoute = (privateRoutesProps, { children }) => {
   const { isLoggedIn, component: Component } = privateRoutesProps;
