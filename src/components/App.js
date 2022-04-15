@@ -1,7 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import propTypes from 'prop-types';
-import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import {
+  Route,
+  BrowserRouter as Router,
+  Routes,
+  Navigate,
+} from 'react-router-dom';
 import jwtDecode from 'jwt-decode';
 
 import { fetchPosts } from '../actions/posts';
@@ -11,6 +16,14 @@ import Page404 from './Page404';
 import Login from './Login';
 import Signup from './Signup';
 import { authenticateUser } from '../actions/auth';
+
+const Settings = () => <div>Settings</div>;
+
+const PrivateRoute = (privateRoutesProps, { children }) => {
+  const { isLoggedIn, component: Component } = privateRoutesProps;
+
+  return isLoggedIn ? <Component /> : <Navigate to="/login" />;
+};
 
 class App extends React.Component {
   componentDidMount() {
@@ -30,8 +43,7 @@ class App extends React.Component {
   }
 
   render() {
-    const { posts } = this.props;
-    console.log('posts from app', posts);
+    const { posts, auth } = this.props;
     return (
       <Router>
         <div>
@@ -39,8 +51,25 @@ class App extends React.Component {
 
           <Routes>
             <Route path="/" element={<Home posts={posts} />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
+            {auth.isLoggedIn ? (
+              <Route path="/login" element={<Navigate to="/" />} />
+            ) : (
+              <Route path="/login" element={<Login />} />
+            )}
+            {auth.isLoggedIn ? (
+              <Route path="/signup" element={<Navigate to="/" />} />
+            ) : (
+              <Route path="/signup" element={<Signup />} />
+            )}
+            <Route
+              path="/settings"
+              element={
+                <PrivateRoute
+                  isLoggedIn={auth.isLoggedIn}
+                  component={Settings}
+                />
+              }
+            />
             <Route path="*" element={<Page404 />} />
           </Routes>
         </div>
@@ -56,6 +85,7 @@ App.propTypes = {
 function mapStateToProps(state) {
   return {
     posts: state.posts,
+    auth: state.auth,
   };
 }
 

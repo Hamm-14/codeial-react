@@ -13,3 +13,4 @@ export const SIGNUP_FAILURE = 'SIGNUP_FAILURE';
 //authenticate actions
 export const AUTHENTICATE_USER = 'AUTHENTICATE_USER';
 export const LOGOUT_USER = 'LOGOUT_USER';
+export const CLEAR_AUTH_STATE = 'CLEAR_AUTH_STATE';
