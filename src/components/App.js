@@ -10,6 +10,7 @@ import Navbar from './Navbar';
 import Page404 from './Page404';
 import Login from './Login';
 import Signup from './Signup';
+import { authenticateUser } from '../actions/auth';
 
 class App extends React.Component {
   componentDidMount() {
@@ -18,7 +19,13 @@ class App extends React.Component {
     const token = localStorage.getItem('token');
     if (token) {
       const user = jwtDecode(token);
-      console.log(user);
+      this.props.dispatch(
+        authenticateUser({
+          email: user.email,
+          name: user.name,
+          _id: user._id,
+        })
+      );
     }
   }
 
