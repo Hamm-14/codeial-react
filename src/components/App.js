@@ -17,6 +17,7 @@ import Page404 from './Page404';
 import Login from './Login';
 import Signup from './Signup';
 import Settings from './Settings';
+import UserProfile from './UserProfile';
 import { authenticateUser } from '../actions/auth';
 
 var loc = {};
@@ -73,6 +74,15 @@ class App extends React.Component {
                 <PrivateRoute
                   isLoggedIn={auth.isLoggedIn}
                   component={Settings}
+                />
+              }
+            />
+            <Route
+              path="/user"
+              element={
+                <PrivateRoute
+                  isLoggedIn={auth.isLoggedIn}
+                  component={UserProfile}
                 />
               }
             />
