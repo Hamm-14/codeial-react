@@ -8,8 +8,8 @@ export function fetchPosts() {
     fetch(url)
       .then((response) => response.json())
       .then((data) => {
-        // console.log('Fetched Posts', data.posts);
-        dispatch(updatePosts(data.posts));
+        // console.log('Fetched Posts', data.data.posts);
+        dispatch(updatePosts(data.data.posts));
       });
   };
 }

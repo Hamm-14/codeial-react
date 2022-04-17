@@ -6,6 +6,7 @@ import {
   BrowserRouter as Router,
   Routes,
   Navigate,
+  useLocation,
 } from 'react-router-dom';
 import jwtDecode from 'jwt-decode';
 
@@ -18,7 +19,10 @@ import Signup from './Signup';
 import Settings from './Settings';
 import { authenticateUser } from '../actions/auth';
 
+var loc = {};
+
 const PrivateRoute = (privateRoutesProps, { children }) => {
+  loc = useLocation();
   const { isLoggedIn, component: Component } = privateRoutesProps;
 
   return isLoggedIn ? <Component /> : <Navigate to="/login" />;
@@ -51,7 +55,10 @@ class App extends React.Component {
           <Routes>
             <Route path="/" element={<Home posts={posts} />} />
             {auth.isLoggedIn ? (
-              <Route path="/login" element={<Navigate to="/" />} />
+              <Route
+                path="/login"
+                element={<Navigate to={loc.pathname ? loc.pathname : '/'} />}
+              />
             ) : (
               <Route path="/login" element={<Login />} />
             )}

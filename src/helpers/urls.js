@@ -1,8 +1,9 @@
-const rootAPI = 'http://localhost:8000/api/v1';
+const rootAPI = 'http://codeial.codingninjas.com:8000/api/v2';
 
 export const APIUrls = {
   fetchPosts: (page = 1, limit = 5) =>
     `${rootAPI}/posts/?page=${page}&limit=${limit}`,
-  login: () => `${rootAPI}/users/create-session`,
-  signup: () => `${rootAPI}/users/create-user`,
+  login: () => `${rootAPI}/users/login`,
+  signup: () => `${rootAPI}/users/signup`,
+  editUser: () => `${rootAPI}/users/edit`,
 };
