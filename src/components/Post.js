@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Comment from './comment';
-import { createComment } from '../actions/posts';
+import { addLikeToStore, createComment } from '../actions/posts';
 
 class Post extends Component {
   constructor(props) {
@@ -33,9 +33,16 @@ class Post extends Component {
     });
   };
 
+  handlePostLike = () => {
+    const { auth, post } = this.props;
+    this.props.dispatch(addLikeToStore(post._id, 'Post', auth.user._id));
+  };
+
   render() {
-    const { post } = this.props;
+    const { post, auth } = this.props;
     const { comment } = this.state;
+
+    const isPostLikedByUser = post.likes.includes(auth.user._id);
 
     return (
       <div className="post-wrapper" key={post._id}>
@@ -55,13 +62,21 @@ class Post extends Component {
           <div className="post-content">{post.content}</div>
 
           <div className="post-actions">
-            <div className="post-like">
-              <img
-                src="https://cdn-icons-png.flaticon.com/512/126/126473.png"
-                alt="likes-icon"
-              />
+            <button className="post-like no-btn" onClick={this.handlePostLike}>
+              {isPostLikedByUser ? (
+                <img
+                  src="https://cdn-icons-png.flaticon.com/512/2107/2107845.png"
+                  alt="likes-icon"
+                />
+              ) : (
+                <img
+                  src="https://cdn-icons-png.flaticon.com/512/2107/2107952.png"
+                  alt="likes-icon"
+                />
+              )}
+
               <span>{post.likes.length}</span>
-            </div>
+            </button>
 
             <div className="post-comments-icon">
               <img
@@ -95,4 +110,10 @@ Post.propTypes = {
   post: PropTypes.object.isRequired,
 };
 
-export default connect()(Post);
+function mapStateToProps(state) {
+  return {
+    auth: state.auth,
+  };
+}
+
+export default connect(mapStateToProps)(Post);
