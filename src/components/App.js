@@ -20,6 +20,7 @@ import Signup from './Signup';
 import Settings from './Settings';
 import UserProfile from './UserProfile';
 import { authenticateUser } from '../actions/auth';
+import { fetchFriends } from '../actions/friends';
 
 var loc = {};
 
@@ -45,18 +46,29 @@ class App extends React.Component {
           _id: user._id,
         })
       );
+
+      this.props.dispatch(fetchFriends());
     }
   }
 
   render() {
-    const { posts, auth } = this.props;
+    const { posts, auth, friends } = this.props;
     return (
       <Router>
         <div>
           <Navbar />
 
           <Routes>
-            <Route path="/" element={<Home posts={posts} />} />
+            <Route
+              path="/"
+              element={
+                <Home
+                  posts={posts}
+                  friends={friends}
+                  isLoggedIn={auth.isLoggedIn}
+                />
+              }
+            />
             {auth.isLoggedIn ? (
               <Route
                 path="/login"
@@ -104,6 +116,7 @@ function mapStateToProps(state) {
   return {
     posts: state.posts,
     auth: state.auth,
+    friends: state.friends,
   };
 }
 
