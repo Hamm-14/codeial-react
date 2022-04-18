@@ -2,6 +2,7 @@
 export const UPDATE_POSTS = 'UPDATE_POSTS';
 export const ADD_POST = 'ADD_POST';
 export const ADD_COMMENT = 'ADD_COMMENT';
+export const UPDATE_POST_LIKE = 'UPDATE_POST_LIKE';
 
 //login actions
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
