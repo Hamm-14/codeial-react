@@ -8,4 +8,8 @@ export const APIUrls = {
   editUser: () => `${rootAPI}/users/edit`,
   fetchUser: (userId) => `${rootAPI}/users/${userId}`,
   userFriends: () => `${rootAPI}/friendship/fetch_user_friends`,
+  addFriend: (userId) =>
+    `${rootAPI}/friendship/create_friendship/?user_id=${userId}`,
+  removeFriend: (userId) =>
+    `${rootAPI}/friendship/remove_friendship/?user_id=${userId}`,
 };

@@ -1,4 +1,4 @@
-import { FETCH_USER_FRIENDS } from './actionTypes';
+import { ADD_FRIEND, FETCH_USER_FRIENDS } from './actionTypes';
 import { APIUrls } from '../helpers/urls';
 import { getAuthTokenFromLocalStorage } from '../helpers/utils';
 
@@ -25,5 +25,12 @@ export function fetchFriends() {
         console.log(data);
         dispatch(fetchUserFriends(data.data.friends));
       });
+  };
+}
+
+export function addFriend(friend) {
+  return {
+    type: ADD_FRIEND,
+    friend,
   };
 }

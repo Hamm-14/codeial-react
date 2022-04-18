@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import FriendsList from './FriendsList';
 import PostsList from './PostsList';
+import FriendsList from './FriendsList';
 
 class Home extends Component {
   render() {

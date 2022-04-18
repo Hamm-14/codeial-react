@@ -27,3 +27,4 @@ export const CLEAR_PROFILE_STATE = 'CLEAR_PROFILE_STATE';
 
 //user friends actions
 export const FETCH_USER_FRIENDS = 'FETCH_USER_FRIENDS';
+export const ADD_FRIEND = 'ADD_FRIEND';

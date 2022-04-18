@@ -2,8 +2,19 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import { fetchProfile, clearProfileState } from '../actions/profile';
+import { APIUrls } from '../helpers/urls';
+import { getAuthTokenFromLocalStorage } from '../helpers/utils';
+import { addFriend } from '../actions/friends';
 
 class UserProfile extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      success: null,
+      error: null,
+    };
+  }
+
   componentDidMount() {
     const { userId } = this.props.params;
     if (userId) {
@@ -16,8 +27,54 @@ class UserProfile extends Component {
     this.props.dispatch(clearProfileState());
   }
 
+  checkIfUserIsFriend = () => {
+    const { friends } = this.props;
+    const { userId } = this.props.params;
+
+    console.log('FRIENDS', friends);
+
+    const index = friends.map((friend) => friend.to_user._id).indexOf(userId);
+
+    if (index !== -1) {
+      return true;
+    }
+    return false;
+  };
+
+  handleAddFriendClick = async () => {
+    const { userId } = this.props.params;
+    const url = APIUrls.addFriend(userId);
+
+    const options = {
+      method: 'POST',
+      headers: {
+        mode: 'no-cors',
+        'Content-Type': 'application/x-www-form-urlencoded',
+        Authorization: `Bearer ${getAuthTokenFromLocalStorage()}`,
+      },
+    };
+
+    const response = await fetch(url, options);
+    const data = await response.json();
+
+    if (data.success) {
+      this.setState({
+        success: true,
+      });
+
+      this.props.dispatch(addFriend(data.data.friendship));
+    } else {
+      this.setState({
+        success: false,
+        error: data.message,
+      });
+    }
+  };
+
   render() {
     const { user } = this.props.profile;
+    const { success, error } = this.state;
+    const isUserAFriend = this.checkIfUserIsFriend();
     return (
       <div className="settings">
         <div className="img-container">
@@ -37,7 +94,28 @@ class UserProfile extends Component {
         </div>
 
         <div className="btn-grp">
-          <button className="button save-btn">Add Friend</button>
+          {isUserAFriend ? (
+            <button
+              className="button save-btn"
+              onClick={this.handleRemoveFriendClick}
+            >
+              Remove Friend
+            </button>
+          ) : (
+            <button
+              className="button save-btn"
+              onClick={this.handleAddFriendClick}
+            >
+              Add Friend
+            </button>
+          )}
+
+          {success && (
+            <div className="alert success-dailog">
+              Friend added sucessfully!
+            </div>
+          )}
+          {error && <div className="alert error-dailog">{error}</div>}
         </div>
       </div>
     );
@@ -47,6 +125,7 @@ class UserProfile extends Component {
 function mapStateToProps(state) {
   return {
     profile: state.profile,
+    friends: state.friends,
   };
 }
 
