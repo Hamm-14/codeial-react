@@ -7,6 +7,7 @@ import {
   Routes,
   Navigate,
   useLocation,
+  useParams,
 } from 'react-router-dom';
 import jwtDecode from 'jwt-decode';
 
@@ -25,8 +26,9 @@ var loc = {};
 const PrivateRoute = (privateRoutesProps, { children }) => {
   loc = useLocation();
   const { isLoggedIn, component: Component } = privateRoutesProps;
+  const params = useParams();
 
-  return isLoggedIn ? <Component /> : <Navigate to="/login" />;
+  return isLoggedIn ? <Component params={params} /> : <Navigate to="/login" />;
 };
 
 class App extends React.Component {
@@ -78,7 +80,7 @@ class App extends React.Component {
               }
             />
             <Route
-              path="/user"
+              path="/users/:userId"
               element={
                 <PrivateRoute
                   isLoggedIn={auth.isLoggedIn}

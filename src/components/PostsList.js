@@ -11,7 +11,7 @@ class PostsList extends React.Component {
           <div className="post-wrapper" key={post._id}>
             <div className="post-header">
               <div className="post-avatar">
-                <Link to="/user">
+                <Link to={`/users/${post.user._id}`}>
                   <img
                     src="https://cdn-icons-png.flaticon.com/512/2922/2922510.png"
                     alt="user-pic"
