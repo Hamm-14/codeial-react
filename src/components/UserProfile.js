@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { fetchProfile, clearProfileState } from '../actions/profile';
 import { APIUrls } from '../helpers/urls';
 import { getAuthTokenFromLocalStorage } from '../helpers/utils';
-import { addFriend } from '../actions/friends';
+import { addFriend, removeFriend } from '../actions/friends';
 
 class UserProfile extends Component {
   constructor(props) {
@@ -12,6 +12,7 @@ class UserProfile extends Component {
     this.state = {
       success: null,
       error: null,
+      successMessage: null,
     };
   }
 
@@ -60,12 +61,44 @@ class UserProfile extends Component {
     if (data.success) {
       this.setState({
         success: true,
+        successMessage: 'Added Friend Successfully',
       });
 
       this.props.dispatch(addFriend(data.data.friendship));
     } else {
       this.setState({
-        success: false,
+        success: null,
+        error: data.message,
+      });
+    }
+  };
+
+  handleRemoveFriendClick = async () => {
+    const { userId } = this.props.params;
+    const url = APIUrls.removeFriend(userId);
+
+    const options = {
+      method: 'POST',
+      headers: {
+        mode: 'no-cors',
+        'Content-Type': 'application/x-www-form-urlencoded',
+        Authorization: `Bearer ${getAuthTokenFromLocalStorage()}`,
+      },
+    };
+
+    const response = await fetch(url, options);
+    const data = await response.json();
+
+    if (data.success) {
+      this.setState({
+        success: true,
+        successMessage: 'Removed Friend Successfully',
+        error: null,
+      });
+      this.props.dispatch(removeFriend(userId));
+    } else {
+      this.setState({
+        success: null,
         error: data.message,
       });
     }
@@ -73,7 +106,7 @@ class UserProfile extends Component {
 
   render() {
     const { user } = this.props.profile;
-    const { success, error } = this.state;
+    const { success, error, successMessage } = this.state;
     const isUserAFriend = this.checkIfUserIsFriend();
     return (
       <div className="settings">
@@ -111,9 +144,7 @@ class UserProfile extends Component {
           )}
 
           {success && (
-            <div className="alert success-dailog">
-              Friend added sucessfully!
-            </div>
+            <div className="alert success-dailog">{successMessage}</div>
           )}
           {error && <div className="alert error-dailog">{error}</div>}
         </div>

@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 function FriendsListItem(props) {
   return (
     <div>
-      <Link className="friends-item" to={`user/${props.friend._id}`}>
+      <Link className="friends-item" to={`users/${props.friend._id}`}>
         <div className="friends-img">
           <img
             src="https://cdn-icons-png.flaticon.com/512/2922/2922510.png"

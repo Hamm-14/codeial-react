@@ -20,7 +20,8 @@ import Signup from './Signup';
 import Settings from './Settings';
 import UserProfile from './UserProfile';
 import { authenticateUser } from '../actions/auth';
-import { fetchFriends } from '../actions/friends';
+// import { fetchFriends } from '../actions/friends';
+import { getAuthTokenFromLocalStorage } from '../helpers/utils';
 
 var loc = {};
 
@@ -36,7 +37,7 @@ class App extends React.Component {
   componentDidMount() {
     this.props.dispatch(fetchPosts());
 
-    const token = localStorage.getItem('token');
+    const token = getAuthTokenFromLocalStorage();
     if (token) {
       const user = jwtDecode(token);
       this.props.dispatch(
@@ -47,12 +48,12 @@ class App extends React.Component {
         })
       );
 
-      this.props.dispatch(fetchFriends());
+      // this.props.dispatch(fetchFriends());
     }
   }
 
   render() {
-    const { posts, auth, friends } = this.props;
+    const { posts, auth } = this.props;
     return (
       <Router>
         <div>
@@ -61,13 +62,7 @@ class App extends React.Component {
           <Routes>
             <Route
               path="/"
-              element={
-                <Home
-                  posts={posts}
-                  friends={friends}
-                  isLoggedIn={auth.isLoggedIn}
-                />
-              }
+              element={<Home posts={posts} isLoggedIn={auth.isLoggedIn} />}
             />
             {auth.isLoggedIn ? (
               <Route
