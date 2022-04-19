@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PostsList from './PostsList';
 import FriendsList from './FriendsList';
+import Chat from './Chat';
 import { fetchFriends } from '../actions/friends';
 import { getAuthTokenFromLocalStorage } from '../helpers/utils';
 
@@ -19,6 +20,7 @@ class Home extends Component {
       <div className="home">
         <PostsList posts={posts} />
         {isLoggedIn && <FriendsList friends={friends} />}
+        {isLoggedIn && <Chat />}
       </div>
     );
   }
